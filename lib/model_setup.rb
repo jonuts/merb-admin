@@ -10,7 +10,7 @@ module MerbAdmin
       @@all.find{|m| m.name == name}
     end
 
-    def self.new(name, &blk)
+    def self.register(name, &blk)
       model = self[name]
       if model
         model.instance_eval(&blk)
@@ -24,8 +24,6 @@ module MerbAdmin
       :included_fields,
       :included_relationships
 
-    private
-
     def initialize(name,&blk)
       @name = name
       @included_fields = []
@@ -33,6 +31,8 @@ module MerbAdmin
       intance_eval(&blk) if block_given?
       self.class.add(self)
     end
+
+    private
 
     def label(name)
       @label_property = name
