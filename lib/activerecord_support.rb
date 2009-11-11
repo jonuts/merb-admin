@@ -71,29 +71,33 @@ module MerbAdmin
       end
 
       def associations
-        model.reflect_on_all_associations.map do |association|
-          {
-            :name => association.name,
-            :pretty_name => association.name.to_s.gsub('_', ' ').capitalize,
-            :type => association.macro,
-            :parent_model => association_parent_model_lookup(association),
-            :parent_key => association_parent_key_lookup(association),
-            :child_model => association_child_model_lookup(association),
-            :child_key => association_child_key_lookup(association),
-          }
+        selected_associations(:reflect_on_all_associations) do |relationships|
+          relationships.map do |association|
+            {
+              :name => association.name,
+              :pretty_name => association.name.to_s.gsub('_', ' ').capitalize,
+              :type => association.macro,
+              :parent_model => association_parent_model_lookup(association),
+              :parent_key => association_parent_key_lookup(association),
+              :child_model => association_child_model_lookup(association),
+              :child_key => association_child_key_lookup(association),
+            }
+          end
         end
       end
 
       def properties
-        model.columns.map do |property|
-          {
-            :name => property.name.to_sym,
-            :pretty_name => property.human_name,
-            :type => property.type,
-            :length => property.limit,
-            :nullable? => property.null,
-            :serial? => property.primary,
-          }
+        selected_properties(:columns) do |properties|
+          properties.map do |property|
+            {
+              :name => property.name.to_sym,
+              :pretty_name => property.human_name,
+              :type => property.type,
+              :length => property.limit,
+              :nullable? => property.null,
+              :serial? => property.primary,
+            }
+          end
         end
       end
 

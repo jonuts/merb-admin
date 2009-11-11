@@ -106,29 +106,33 @@ module MerbAdmin
       end
 
       def associations
-        model.all_association_reflections.map do |association|
-          {
-            :name => association_name_lookup(association),
-            :pretty_name => association_pretty_name_lookup(association),
-            :type => association_type_lookup(association),
-            :parent_model => association_parent_model_lookup(association),
-            :parent_key => association_parent_key_lookup(association),
-            :child_model => association_child_model_lookup(association),
-            :child_key => association_child_key_lookup(association),
-          }
+        selected_associations(:all_association_reflections) do |associations|
+          associations.map do |association|
+            {
+              :name => association_name_lookup(association),
+              :pretty_name => association_pretty_name_lookup(association),
+              :type => association_type_lookup(association),
+              :parent_model => association_parent_model_lookup(association),
+              :parent_key => association_parent_key_lookup(association),
+              :child_model => association_child_model_lookup(association),
+              :child_key => association_child_key_lookup(association),
+            }
+          end
         end
       end
 
       def properties
-        model.columns.map do |property|
-          {
-            :name => property,
-            :pretty_name => property.to_s.gsub(/_id$/, "").gsub("_", " ").capitalize,
-            :type => property_type_lookup(property),
-            :length => property_length_lookup(property),
-            :nullable? => model.db_schema[property][:allow_null],
-            :serial? => model.db_schema[property][:primary_key],
-          }
+        selected_properties(:columns) do |properties|
+          properties.map do |property|
+            {
+              :name => property,
+              :pretty_name => property.to_s.gsub(/_id$/, "").gsub("_", " ").capitalize,
+              :type => property_type_lookup(property),
+              :length => property_length_lookup(property),
+              :nullable? => model.db_schema[property][:allow_null],
+              :serial? => model.db_schema[property][:primary_key],
+            }
+          end
         end
       end
 

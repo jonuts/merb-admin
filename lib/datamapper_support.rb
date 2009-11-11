@@ -69,16 +69,18 @@ module MerbAdmin
       end
 
       def associations
-        model.relationships.to_a.map do |name, association|
-          {
-            :name => name,
-            :pretty_name => name.to_s.gsub("_", " ").capitalize,
-            :type => association_type_lookup(association),
-            :parent_model => association.parent_model,
-            :parent_key => association.parent_key.map{|r| r.name},
-            :child_model => association.child_model,
-            :child_key => association.child_key.map{|r| r.name},
-          }
+        generate_associations(:relationships) do |relationships|
+          relationships.map do |name, association|
+            {
+              :name => name,
+              :pretty_name => name.to_s.gsub("_", " ").capitalize,
+              :type => association_type_lookup(association),
+              :parent_model => association.parent_model,
+              :parent_key => association.parent_key.map{|r| r.name},
+              :child_model => association.child_model,
+              :child_key => association.child_key.map{|r| r.name},
+            }
+          end
         end
       end
 

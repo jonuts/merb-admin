@@ -19,6 +19,9 @@ if defined?(Merb::Plugins)
   Merb::Slices::config[:merb_admin][:per_page] ||= 100
   Merb::Slices::config[:merb_admin][:excluded_models] ||= []
 
+  require 'model_setup'
+  require 'config_mixin'
+
   # All Slice code is expected to be namespaced inside a module
   module MerbAdmin
 
