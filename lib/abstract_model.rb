@@ -81,7 +81,7 @@ module MerbAdmin
     def selected_associations(association_meth)
       if @model_config
         relationships = Array(@model.send(association_meth)).select{|name, association| 
-          @model_config.included_relationships.include?(name)
+          @model_config.included_relationships.include?(name.to_s.snake_case.to_sym)
         }
       else
         relationships = Array(@model.send(association_meth))

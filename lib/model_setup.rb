@@ -3,7 +3,7 @@ module MerbAdmin
     @@all ||= []
 
     def self.add(model) 
-      @@all << model unless @@all.include?(model)
+      @@all << model unless @@all.any? {|e| e.name == model.name}
     end
 
     def self.[](name)

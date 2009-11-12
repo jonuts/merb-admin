@@ -69,7 +69,7 @@ module MerbAdmin
       end
 
       def associations
-        generate_associations(:relationships) do |relationships|
+        selected_associations(:relationships) do |relationships|
           relationships.map do |name, association|
             {
               :name => name,
@@ -85,15 +85,17 @@ module MerbAdmin
       end
 
       def properties
-        model.properties.map do |property|
-          {
-            :name => property.name,
-            :pretty_name => property.name.to_s.gsub(/_id$/, "").gsub("_", " ").capitalize,
-            :type => type_lookup(property),
-            :length => property.length,
-            :nullable? => property.nullable?,
-            :serial? => property.serial?,
-          }
+        selected_properties(:properties) do |properties|
+          properties.map do |property|
+            {
+              :name => property.name,
+              :pretty_name => property.name.to_s.gsub(/_id$/, "").gsub("_", " ").capitalize,
+              :type => type_lookup(property),
+              :length => property.length,
+              :nullable? => property.nullable?,
+              :serial? => property.serial?,
+            }
+          end
         end
       end
 
