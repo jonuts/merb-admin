@@ -32,12 +32,6 @@ module MerbAdmin
       @models << new(model) if model
     end
 
-    def self.add_model(name)
-      return if Merb::Slices.config[:merb_admin][:excluded_models].include?(name.to_s.snake_case.to_sym)
-      model = lookup(model_name.to_s.to_sym)
-      @models << new(model) if model
-    end
-
     # Given a symbol +model_name+, finds the corresponding model class
     def self.lookup(model_name)
       begin
@@ -62,7 +56,7 @@ module MerbAdmin
     attr_reader :model_config
 
     def initialize(model)
-      @model_config = MerbAdmin::ModelConfig[model.to_s.snake_case.to_sym]
+      @model_config = MerbAdmin::ModelSetup[model.to_s.snake_case.to_sym]
       model = self.class.lookup(model.to_s.camel_case) unless model.is_a?(Class)
       orm = Merb.orm
       @model = model
