@@ -86,13 +86,18 @@ module MerbAdmin
             :pretty_name => property.name.to_s.gsub(/_id$/, "").gsub("_", " ").capitalize,
             :type => type_lookup(property),
             :length => property.length,
-            :nullable? => property.allow_nil?,
+            :nullable? => property.send(nullable_meth),
             :serial? => property.serial?,
           }
         end
       end
 
       private
+
+      # DataMapper::Property#nullable? became :allow_nil? in DM 0.10.2
+      def nullable_meth
+        DataMapper::VERSION >= "0.10.2" ? :allow_nil? : :nullable?
+      end
 
       def merge_order(options)
         @sort ||= options.delete(:sort) || :id
